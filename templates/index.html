@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>KBO 순위 작업</title>
+
+    <meta property="og:title" content="KBO 랭킹"/>
+    <meta property="og:description" content="KBO 랭킹"/>
+    <meta property="og:image" content="{{ url_for('static', filename='ogkbo.png') }}"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .kbo_logo {
+            width: 400px;
+            height: 146px;
+            background-image: url("http://www.world-news7.com/data/tmp/2101/20210119073444_enpgmlny.png");
+            background-size: cover;
+            background-position: center;
+            margin: 0px auto 40px auto;
+        }
+
+        .kbo_rank {
+            margin: auto;
+            display: block;
+            width: 700px;
+
+        }
+
+    </style>
+
+    <script>
+
+        $(document).ready(function () {
+            kboRankP();
+        });
+
+        function kboRankP() {
+            $.ajax({
+                type: "POST",
+                url: "/kbo",
+                data: {},
+                success: function (response) { // 성공하면
+
+                }
+            })
+        }
+
+        $(document).ready(function () {
+            kboRankG();
+        });
+
+        function kboRankG() {
+            $.ajax({
+                type: "GET",
+                url: "/kbo",
+                data: {},
+                success: function (response) {
+                    let kbo_rank = response['kbo_ranks']
+                    for (let i = 0; i < kbo_rank.length; i++) {
+                        let rank = kbo_rank[i]['rank']
+                        let name = kbo_rank[i]['name']
+                        let total = kbo_rank[i]['total']
+                        let win = kbo_rank[i]['win']
+                        let draw = kbo_rank[i]['draw']
+                        let lose = kbo_rank[i]['lose']
+                        let win_rate = kbo_rank[i]['win_rate']
+                        let gap = kbo_rank[i]['gap']
+                        let conti = kbo_rank[i]['conti']
+                        console.log(name, total, win, draw, lose, win_rate, gap, conti)
+
+                        let temp_html = `<tr>
+                                            <th scope="row">&nbsp;${rank}</th>
+                                            <td>${name}</td>
+                                            <td>${total}</td>
+                                            <td>${win}</td>
+                                            <td>${draw}</td>
+                                            <td>${lose}</td>
+                                            <td>${win_rate}</td>
+                                            <td>&nbsp; ${gap}</td>
+                                            <td>${conti}</td>
+                                        </tr>`
+
+                        $('#rank').append(temp_html)
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+    <div class="kbo_logo">
+    </div>
+    <div class="kbo_rank">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">순위</th>
+                <th scope="col">팀명</th>
+                <th scope="col">경기</th>
+                <th scope="col">승</th>
+                <th scope="col">무</th>
+                <th scope="col">패</th>
+                <th scope="col">승률</th>
+                <th scope="col">게임차</th>
+                <th scope="col">연속</th>
+            </tr>
+            </thead>
+            <tbody id="rank">
+            </tbody>
+        </table>
+    </div>
+
+
+</body>
+
+</html>
+
+
